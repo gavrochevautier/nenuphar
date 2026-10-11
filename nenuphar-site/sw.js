@@ -1,7 +1,7 @@
 // Service worker : l'appli s'ouvre même sans réseau.
 // Réseau d'abord (pour toujours avoir la dernière version), cache en secours.
 var CACHE = "nenuphar-v1";
-var SHELL = ["./", "index.html", "config.js", "manifest.webmanifest", "icon.svg", "dessin.png", "icon-192.png", "icon-512.png"];
+var SHELL = ["./", "index.html", "config.js", "manifest.webmanifest", "icon.svg", "dessin.png", "fleur.png", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL); }).then(function () { return self.skipWaiting(); }));
