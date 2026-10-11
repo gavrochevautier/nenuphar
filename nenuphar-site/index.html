@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nénuphar</title>
 <meta name="description" content="Nos poèmes, rien que nos poèmes.">
-<meta name="theme-color" content="#0A3B2E">
+<meta name="theme-color" content="#D6E6DE">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -39,8 +39,6 @@
 html, body { height: 100%; margin: 0; }
 body {
   font-family: var(--text); color: var(--ink); background-color: var(--eau);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='22' viewBox='0 0 44 22'%3E%3Cg fill='none' stroke='%23B5CFC3' stroke-width='1'%3E%3Cpath d='M0 22a22 22 0 0 1 44 0'/%3E%3Cpath d='M6 22a16 16 0 0 1 32 0'/%3E%3Cpath d='M12 22a10 10 0 0 1 20 0'/%3E%3C/g%3E%3C/svg%3E");
-  background-size: 44px 22px;
   -webkit-font-smoothing: antialiased; overflow: hidden;
 }
 button, input, textarea { font: inherit; color: inherit; }
@@ -53,12 +51,8 @@ button { cursor: pointer; }
 /* ---- en-tête : gradin art déco ---- */
 .top {
   position: relative; flex: none; background: var(--sapin); color: var(--papier);
-  padding: calc(env(safe-area-inset-top) + 14px) 16px 30px; text-align: center;
-  clip-path: polygon(0 0, 100% 0, 100% 62%, 94% 62%, 94% 78%, 84% 78%, 84% 100%, 16% 100%, 16% 78%, 6% 78%, 6% 62%, 0 62%);
+  padding: calc(env(safe-area-inset-top) + 14px) 16px 16px; text-align: center;
   z-index: 3;
-}
-.top::after {
-  content: ""; position: absolute; left: 16%; right: 16%; bottom: 7px; height: 1px; background: var(--opale); opacity: .7;
 }
 .top h1 { margin: 0; font: 400 2.1rem/1.1 var(--display); letter-spacing: .06em; }
 .top .sub { margin: 2px 0 0; font-size: .82rem; font-weight: 300; color: var(--opale); letter-spacing: .04em; }
@@ -66,14 +60,11 @@ button { cursor: pointer; }
 .top .lis path { stroke-dasharray: 220; stroke-dashoffset: 220; animation: draw 1.4s .1s ease-out forwards; }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 .top h1, .top .sub { position: relative; }
-.install {
-  position: absolute; right: 12px; top: calc(env(safe-area-inset-top) + 12px); z-index: 2; background: none;
-  border: 1px solid var(--opale); color: var(--papier); padding: 5px 12px; font-size: .78rem; font-weight: 400;
-}
-.banner { flex: none; background: var(--paon); color: var(--papier); font-size: .82rem; padding: 7px 16px; text-align: center; margin-top: -14px; padding-top: 20px; }
+.install { position: absolute; right: 10px; top: calc(env(safe-area-inset-top) + 10px); z-index: 5; background: var(--sapin); border: 0; color: var(--papier); padding: 6px 12px; font-size: .78rem; }
+.banner { flex: none; background: var(--paon); color: var(--papier); font-size: .82rem; padding: 7px 16px; text-align: center; }
 
 /* ---- zone de lecture ---- */
-main { flex: 1; overflow-y: auto; padding: 6px 14px 18px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+main { flex: 1; overflow-y: auto; padding: calc(env(safe-area-inset-top) + 8px) 14px 18px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
 .day { display: flex; align-items: center; gap: 10px; margin: 22px 8% 14px; color: var(--ink-2); font-size: .8rem; font-weight: 300; }
 .day::before, .day::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--jade)); }
 .day::after { background: linear-gradient(270deg, transparent, var(--jade)); }
@@ -110,9 +101,9 @@ main { flex: 1; overflow-y: auto; padding: 6px 14px 18px; scroll-behavior: smoot
 .mini { background: none; border: 0; padding: 7px 8px; font-size: .8rem; color: var(--ink-2); min-height: 34px; display: inline-flex; align-items: center; gap: 5px; }
 .mini:hover { color: var(--sapin); }
 .mini.danger { color: var(--danger); font-weight: 600; }
-.heart svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
-.heart.on { color: var(--jade); }
-.heart.on svg { fill: var(--jade); stroke: var(--jade); }
+.heart .fl { width: 24px; height: 24px; object-fit: contain; filter: grayscale(1) opacity(.45); transition: filter .2s; }
+.heart.on .fl { filter: none; }
+.heart.on { color: var(--paon); }
 
 .empty { text-align: center; color: var(--ink-2); padding: 50px 28px; }
 .empty svg { width: 130px; height: 80px; color: var(--jade); }
@@ -143,7 +134,7 @@ form.write { padding: 10px 12px 6px; }
 .w-title::placeholder, .w-text::placeholder { color: #86B3A2; opacity: 1; }
 .row { display: flex; gap: 10px; align-items: flex-end; margin-top: 6px; }
 .w-text { font-family: var(--poem); flex: 1; min-height: 46px; max-height: 38dvh; resize: none; background: var(--sapin-2); border: 1px solid #2C6A58; padding: 10px 12px; font-size: 1.12rem; line-height: 1.5; color: var(--papier); }
-.send { flex: none; width: 64px; height: 46px; background: var(--paon); border: 0; color: var(--papier); font: 400 .98rem var(--display); letter-spacing: .02em;
+.send { flex: none; width: 82px; height: 46px; background: var(--paon); border: 0; color: var(--papier); font: 400 .98rem var(--display); letter-spacing: .02em;
   clip-path: polygon(9px 0, calc(100% - 9px) 0, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0 calc(100% - 9px), 0 9px); }
 .send:disabled { background: #2C6A58; opacity: .7; }
 .tabs { display: flex; border-top: 1px solid #1B5645; }
@@ -185,23 +176,9 @@ form.write { padding: 10px 12px 6px; }
 </svg>
 
 <div id="app">
-  <header class="top">
-    <button id="installBtn" class="install" hidden>Installer</button>
-    <h1>Nénuphar</h1>
-    <p class="sub" id="who">Nos poèmes</p>
-  </header>
+  <button id="installBtn" class="install" hidden>Installer</button>
   <div class="banner" id="banner" hidden>Mode essai : les poèmes restent sur ce téléphone.</div>
 
-  <section class="tools" id="tools" hidden>
-    <input id="q" class="search" type="search" placeholder="Chercher un mot, un titre, un nom" aria-label="Chercher dans le recueil" autocomplete="off">
-    <div class="chips" id="chips" role="group" aria-label="Filtrer le recueil">
-      <button class="chip" data-f="all" aria-pressed="true">Tous</button>
-      <button class="chip" data-f="victor" aria-pressed="false">Victor</button>
-      <button class="chip" data-f="noa" aria-pressed="false">Noa</button>
-      <button class="chip" data-f="loved" aria-pressed="false">Mes cœurs</button>
-    </div>
-  </section>
-  <p class="count" id="count" hidden></p>
 
   <main id="main" aria-live="polite"></main>
 
@@ -211,13 +188,9 @@ form.write { padding: 10px 12px 6px; }
       <input id="w-title" class="w-title" type="text" maxlength="80" placeholder="Titre (facultatif)" aria-label="Titre du poème">
       <div class="row">
         <textarea id="w-text" class="w-text" rows="2" maxlength="4000" placeholder="Écris ton poème…" aria-label="Texte du poème"></textarea>
-        <button class="send" id="send" type="submit">Offrir</button>
+        <button class="send" id="send" type="submit">Fleurir</button>
       </div>
     </form>
-    <nav class="tabs" role="tablist" aria-label="Sections">
-      <button class="tab" id="tab-ech" role="tab" aria-selected="true">Échanges<span class="dot" id="newDot" hidden></span></button>
-      <button class="tab" id="tab-rec" role="tab" aria-selected="false">Recueil</button>
-    </nav>
   </div>
 </div>
 
@@ -244,7 +217,7 @@ form.write { padding: 10px 12px 6px; }
   var $ = function (id) { return document.getElementById(id); };
   var CFG = window.NENUPHAR_CONFIG && window.NENUPHAR_CONFIG.firebase;
   var COL = "nenuphar_poemes";
-  var NAMES = { "gavrochevautier@gmail.com": "Victor", "noalou.marghieri@gmail.com": "Noa" };
+  var NAMES = { "gavrochevautier@gmail.com": "Victor", "noalou.marghieri@gmail.com": "Noa-Loup" };
 
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* ignoré */ } }
@@ -252,7 +225,7 @@ form.write { padding: 10px 12px 6px; }
   var state = {
     store: null, mode: "local", uid: null, email: "", me: "",
     poems: [], ready: false, fatal: "", unsub: null,
-    view: "ech", filter: "all", q: "", replyTo: null, editing: null, confirmDel: null,
+     editing: null, confirmDel: null,
     seen: Number(lsGet("nenuphar.seen") || 0), stick: true, opened: {}
   };
 
@@ -358,30 +331,23 @@ form.write { padding: 10px 12px 6px; }
     wrap.dataset.id = p.id;
     var inn = el("div", "card-in"); wrap.appendChild(inn);
 
-    if (p.reply) {
-      var q = el("blockquote", "quote");
-      q.appendChild(el("b", null, p.reply.name || "")); q.appendChild(document.createTextNode(" — " + (p.reply.excerpt || "")));
-      inn.appendChild(q);
-    }
     if (p.title) inn.appendChild(el("h3", "p-title", p.title));
     inn.appendChild(el("p", "p-body", p.text || ""));
 
     var foot = el("div", "foot");
     var sig = el("div", "sig");
-    sig.appendChild(el("b", null, p.byName || nameOf(p.by)));
+    sig.appendChild(el("b", null, nameOf(p.by)));
     sig.appendChild(document.createTextNode(opts.compact ? ", " + shortDate(p.at || 0) : ", " + timeLabel(p.at || 0) + (p.edited ? " (modifié)" : "")));
     foot.appendChild(sig);
 
     var n = (p.loves || []).length;
     var hb = el("button", "mini heart" + (lovedByMe(p) ? " on" : "")); hb.type = "button";
-    hb.setAttribute("aria-label", lovedByMe(p) ? "Retirer mon cœur" : "Aimer ce poème"); hb.setAttribute("aria-pressed", lovedByMe(p) ? "true" : "false");
-    hb.innerHTML = HEART; if (n) hb.appendChild(document.createTextNode(String(n)));
+    hb.setAttribute("aria-label", lovedByMe(p) ? "Retirer mon nénuphar" : "Poser un nénuphar"); hb.setAttribute("aria-pressed", lovedByMe(p) ? "true" : "false");
+    var fi = document.createElement("img"); fi.src = "fleur.png"; fi.alt = ""; fi.className = "fl"; hb.appendChild(fi);
+    if (n) hb.appendChild(document.createTextNode(String(n)));
     hb.addEventListener("click", function (ev) { ev.stopPropagation(); toggleLove(p); });
     foot.appendChild(hb);
 
-    var rb = el("button", "mini", "Répondre"); rb.type = "button";
-    rb.addEventListener("click", function (ev) { ev.stopPropagation(); startReply(p); });
-    foot.appendChild(rb);
 
     if (mine) {
       var eb = el("button", "mini", "Modifier"); eb.type = "button";
@@ -439,38 +405,21 @@ form.write { padding: 10px 12px 6px; }
       main.appendChild(card(p));
     });
   }
-  function renderRecueil(main) {
-    var list = visibleFor().sort(function (a, b) { return (b.at || 0) - (a.at || 0); });
-    var c = $("count");
-    c.hidden = false;
-    c.textContent = state.poems.length ? (list.length === 1 ? "1 poème" : list.length + " poèmes") + (list.length !== state.poems.length ? " sur " + state.poems.length : "") : "";
-    if (!state.poems.length) { main.appendChild(emptyBlock("Pas encore de recueil", "Les poèmes que vous vous offrez viendront s'ajouter ici.")); }
-    else if (!list.length) { main.appendChild(emptyBlock("Rien trouvé", "Essaie un autre mot ou change de filtre.")); }
-    list.forEach(function (p) { main.appendChild(card(p, { compact: true })); });
-    var out = el("div", "out");
-    var ib = el("button", null, "Importer des poèmes"); ib.type = "button"; ib.style.marginRight = "8px";
-    ib.addEventListener("click", function () { $("importFile").click(); });
-    out.appendChild(ib);
-    var b = el("button", null, "Se déconnecter"); b.type = "button";
+  function logoutBlock(main) {
+    if (state.mode !== "firebase") return;
+    var out = el("div", "out"); var b = el("button", null, "Se déconnecter"); b.type = "button";
     b.addEventListener("click", function () { if (state.store && state.store.signOut) state.store.signOut(); });
-    if (state.mode === "firebase") out.appendChild(b);
-    main.appendChild(out);
+    out.appendChild(b); main.appendChild(out);
   }
   function render() {
     var main = $("main");
     var prevTop = main.scrollTop, atBottom = main.scrollHeight - main.scrollTop - main.clientHeight < 80;
     while (main.firstChild) main.removeChild(main.firstChild);
-    var rec = state.view === "rec";
-    $("write").hidden = rec; $("tools").hidden = !rec; $("count").hidden = !rec;
-    $("tab-ech").setAttribute("aria-selected", rec ? "false" : "true");
-    $("tab-rec").setAttribute("aria-selected", rec ? "true" : "false");
     if (state.fatal) { main.appendChild(emptyBlock("Connexion impossible", state.fatal)); return; }
-    if (!state.ready) { main.appendChild(emptyBlock("Un instant…", "Le recueil se charge.")); return; }
-    if (rec) renderRecueil(main); else renderEchanges(main);
-    if (!rec && (state.stick || atBottom)) { main.scrollTop = main.scrollHeight; state.stick = false; }
+    if (!state.ready) { main.appendChild(emptyBlock("Un instant…", "Les poèmes se chargent.")); return; }
+    renderEchanges(main); logoutBlock(main);
+    if (state.stick || atBottom) { main.scrollTop = main.scrollHeight; state.stick = false; }
     else main.scrollTop = prevTop;
-    var hasNew = state.view === "rec" && state.poems.some(function (p) { return !isMine(p) && (p.at || 0) > state.seen; });
-    $("newDot").hidden = !hasNew;
   }
   function markSeen() {
     var m = 0; state.poems.forEach(function (p) { if (!isMine(p) && (p.at || 0) > m) m = p.at; });
@@ -478,39 +427,25 @@ form.write { padding: 10px 12px 6px; }
   }
 
   /* ---------- actions ---------- */
-  function setView(v) {
-    if (state.view === "ech" && v === "rec") markSeen();
-    state.view = v; state.stick = v === "ech";
-    render();
-    if (v === "ech") setTimeout(markSeen, 4000);
-  }
   function toggleLove(p) {
     if (!state.store || !state.email) return;
     var set = (p.loves || []).slice(), i = set.indexOf(state.email);
     if (i >= 0) set.splice(i, 1); else set.push(state.email);
     state.store.update(p.id, { loves: set }).catch(function (e) { toast(dbMsg(e)); });
   }
-  function startReply(p) {
-    state.replyTo = { id: p.id, name: p.byName || nameOf(p.by), excerpt: excerpt(p) };
-    state.editing = null;
-    if (state.view !== "ech") setView("ech");
-    showCtx(); $("w-text").focus();
-  }
   function startEdit(p) {
-    state.editing = p.id; state.replyTo = null;
+    state.editing = p.id;
     $("w-title").value = p.title || ""; $("w-text").value = p.text || ""; autosize();
-    if (state.view !== "ech") setView("ech");
     showCtx(); $("w-text").focus();
   }
   function showCtx() {
     var box = $("ctx");
     if (state.editing) { $("ctxText").textContent = "Tu modifies ce poème"; $("send").textContent = "Garder"; box.hidden = false; }
-    else if (state.replyTo) { $("ctxText").textContent = "En réponse à " + state.replyTo.name + " : " + state.replyTo.excerpt; $("send").textContent = "Offrir"; box.hidden = false; }
-    else { box.hidden = true; $("send").textContent = "Offrir"; }
+    else { box.hidden = true; $("send").textContent = "Fleurir"; }
   }
   function clearCtx(keepText) {
     var wasEditing = !!state.editing;
-    state.replyTo = null; state.editing = null; showCtx();
+    state.editing = null; showCtx();
     if (wasEditing && !keepText) { $("w-title").value = ""; $("w-text").value = ""; autosize(); }
   }
   function removePoem(p) {
@@ -532,17 +467,6 @@ form.write { padding: 10px 12px 6px; }
   $("w-title").addEventListener("input", function () { if (!state.editing) saveDraft(); });
   $("w-text").addEventListener("keydown", function (e) { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); $("write").requestSubmit ? $("write").requestSubmit() : $("send").click(); } });
   $("ctxX").addEventListener("click", function () { clearCtx(false); });
-  $("tab-ech").addEventListener("click", function () { setView("ech"); });
-  $("tab-rec").addEventListener("click", function () { setView("rec"); });
-  $("q").addEventListener("input", function () { state.q = this.value; render(); });
-  Array.prototype.forEach.call(document.querySelectorAll(".chip"), function (b) {
-    b.addEventListener("click", function () {
-      state.filter = b.dataset.f;
-      Array.prototype.forEach.call(document.querySelectorAll(".chip"), function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
-      render();
-    });
-  });
-
   $("write").addEventListener("submit", function (ev) {
     ev.preventDefault();
     var text = $("w-text").value.replace(/\s+$/g, "").replace(/^\n+/, ""), title = $("w-title").value.trim();
@@ -555,7 +479,6 @@ form.write { padding: 10px 12px 6px; }
     } else {
       var id = s.id();
       var doc = { title: title, text: text, by: state.email, byName: state.me, at: Date.now(), loves: [] };
-      if (state.replyTo) doc.reply = { id: state.replyTo.id, name: state.replyTo.name, excerpt: state.replyTo.excerpt };
       op = s.set(id, doc);
       state.stick = true;
     }
@@ -625,7 +548,6 @@ form.write { padding: 10px 12px 6px; }
 
   function setMe(email) {
     state.email = String(email || "").toLowerCase(); state.me = nameOf(state.email);
-    $("who").textContent = state.me === "Victor" ? "Pour Noa" : state.me === "Noa" ? "Pour Victor" : "Nos poèmes";
   }
   function boot() {
     $("l-email").value = lsGet("nenuphar.email") || "";
@@ -649,7 +571,7 @@ form.write { padding: 10px 12px 6px; }
   }
 
   if (window.__NENUPHAR_TEST__) {
-    window.__NENUPHAR_TEST__ = { state: state, render: render, setView: setView, setMe: setMe, nameOf: nameOf };
+    window.__NENUPHAR_TEST__ = { state: state, render: render, setMe: setMe, nameOf: nameOf };
   }
   boot();
 })();
