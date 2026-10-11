@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nénuphar</title>
+<meta name="description" content="Nos poèmes, rien que nos poèmes.">
+<meta name="theme-color" content="#0A3B2E">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Nénuphar">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&family=Poiret+One&display=swap" rel="stylesheet">
+<style>
+:root {
+  --eau: #D6E6DE;
+  --eau-2: #C3D9CE;
+  --papier: #F3F9F5;
+  --sapin: #0A3B2E;
+  --sapin-2: #062A21;
+  --jade: #2C8C72;
+  --opale: #9CCBB9;
+  --paon: #14607E;
+  --glace: #A9D0E1;
+  --ink: #0D2A24;
+  --ink-2: #4B6B62;
+  --danger: #8C2F39;
+  --display: "Poiret One", "Josefin Sans", system-ui, sans-serif;
+  --poem: "EB Garamond", Georgia, serif;
+  --text: "Josefin Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --chamfer: 14px;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  font-family: var(--text); color: var(--ink); background-color: var(--eau);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='22' viewBox='0 0 44 22'%3E%3Cg fill='none' stroke='%23B5CFC3' stroke-width='1'%3E%3Cpath d='M0 22a22 22 0 0 1 44 0'/%3E%3Cpath d='M6 22a16 16 0 0 1 32 0'/%3E%3Cpath d='M12 22a10 10 0 0 1 20 0'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 44px 22px;
+  -webkit-font-smoothing: antialiased; overflow: hidden;
+}
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--paon); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+#app { height: 100dvh; display: flex; flex-direction: column; max-width: 640px; margin: 0 auto; position: relative; background: transparent; }
+
+/* ---- en-tête : gradin art déco ---- */
+.top {
+  position: relative; flex: none; background: var(--sapin); color: var(--papier);
+  padding: calc(env(safe-area-inset-top) + 14px) 16px 30px; text-align: center;
+  clip-path: polygon(0 0, 100% 0, 100% 62%, 94% 62%, 94% 78%, 84% 78%, 84% 100%, 16% 100%, 16% 78%, 6% 78%, 6% 62%, 0 62%);
+  z-index: 3;
+}
+.top::after {
+  content: ""; position: absolute; left: 16%; right: 16%; bottom: 7px; height: 1px; background: var(--opale); opacity: .7;
+}
+.top h1 { margin: 0; font: 400 2.1rem/1.1 var(--display); letter-spacing: .06em; }
+.top .sub { margin: 2px 0 0; font-size: .82rem; font-weight: 300; color: var(--opale); letter-spacing: .04em; }
+.top .lis { position: absolute; left: 50%; top: 4px; width: 150px; height: 90px; margin-left: -75px; color: var(--jade); opacity: .55; pointer-events: none; }
+.top .lis path { stroke-dasharray: 220; stroke-dashoffset: 220; animation: draw 1.4s .1s ease-out forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.top h1, .top .sub { position: relative; }
+.install {
+  position: absolute; right: 12px; top: calc(env(safe-area-inset-top) + 12px); z-index: 2; background: none;
+  border: 1px solid var(--opale); color: var(--papier); padding: 5px 12px; font-size: .78rem; font-weight: 400;
+}
+.banner { flex: none; background: var(--paon); color: var(--papier); font-size: .82rem; padding: 7px 16px; text-align: center; margin-top: -14px; padding-top: 20px; }
+
+/* ---- zone de lecture ---- */
+main { flex: 1; overflow-y: auto; padding: 6px 14px 18px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+.day { display: flex; align-items: center; gap: 10px; margin: 22px 8% 14px; color: var(--ink-2); font-size: .8rem; font-weight: 300; }
+.day::before, .day::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--jade)); }
+.day::after { background: linear-gradient(270deg, transparent, var(--jade)); }
+.day i { width: 7px; height: 7px; background: var(--jade); transform: rotate(45deg); flex: none; }
+.day span { text-align: center; }
+.fresh { margin: 18px 8% 8px; text-align: center; color: var(--paon); font: 400 1.05rem var(--display); display: flex; gap: 10px; align-items: center; justify-content: center; }
+.fresh::before, .fresh::after { content: ""; width: 7px; height: 7px; background: var(--paon); transform: rotate(45deg); }
+
+/* cartouche : coins coupés, double filet */
+.card { --edge: var(--sapin); position: relative; margin: 0 0 14px; background: var(--edge); padding: 2px;
+  clip-path: polygon(var(--chamfer) 0, calc(100% - var(--chamfer)) 0, 100% var(--chamfer), 100% calc(100% - var(--chamfer)), calc(100% - var(--chamfer)) 100%, var(--chamfer) 100%, 0 calc(100% - var(--chamfer)), 0 var(--chamfer)); }
+.card.mine { --edge: var(--sapin); margin-left: 11%; }
+.card.theirs { --edge: var(--paon); margin-right: 11%; }
+.card.wide { margin-left: 0; margin-right: 0; }
+.card-in { position: relative; background: var(--papier); padding: 18px 20px 12px;
+  clip-path: polygon(calc(var(--chamfer) - 1px) 0, calc(100% - var(--chamfer) + 1px) 0, 100% calc(var(--chamfer) - 1px), 100% calc(100% - var(--chamfer) + 1px), calc(100% - var(--chamfer) + 1px) 100%, calc(var(--chamfer) - 1px) 100%, 0 calc(100% - var(--chamfer) + 1px), 0 calc(var(--chamfer) - 1px)); }
+.card-in::before { content: ""; position: absolute; inset: 5px; background: var(--opale);
+  clip-path: polygon(calc(var(--chamfer) - 5px) 0, calc(100% - var(--chamfer) + 5px) 0, 100% calc(var(--chamfer) - 5px), 100% calc(100% - var(--chamfer) + 5px), calc(100% - var(--chamfer) + 5px) 100%, calc(var(--chamfer) - 5px) 100%, 0 calc(100% - var(--chamfer) + 5px), 0 calc(var(--chamfer) - 5px)); }
+.card-in::after { content: ""; position: absolute; inset: 6px; background: var(--papier);
+  clip-path: polygon(calc(var(--chamfer) - 6px) 0, calc(100% - var(--chamfer) + 6px) 0, 100% calc(var(--chamfer) - 6px), 100% calc(100% - var(--chamfer) + 6px), calc(100% - var(--chamfer) + 6px) 100%, calc(var(--chamfer) - 6px) 100%, 0 calc(100% - var(--chamfer) + 6px), 0 calc(var(--chamfer) - 6px)); }
+.card-in > * { position: relative; z-index: 1; }
+.p-title { margin: 0 0 12px; text-align: center; font: 400 1.55rem/1.2 var(--display); color: var(--sapin); }
+.theirs .p-title { color: var(--paon); }
+.p-title::after { content: ""; display: block; width: 9px; height: 9px; margin: 9px auto 0; background: var(--jade); transform: rotate(45deg); }
+.p-body { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: 400 1.2rem/1.65 var(--poem); }
+.clamp .p-body { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.quote { margin: 0 0 12px; padding: 4px 0 4px 12px; border-left: 3px solid var(--jade); color: var(--ink-2); font-size: .88rem; font-weight: 300; font-style: italic; }
+.quote b { font-style: normal; font-family: var(--display); font-weight: 400; font-size: 1rem; color: var(--sapin); }
+.theirs .quote { border-left-color: var(--glace); }
+.foot { display: flex; align-items: center; gap: 4px; margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--eau-2); font-size: .8rem; color: var(--ink-2); flex-wrap: wrap; }
+.sig { flex: 1; min-width: 120px; font-weight: 300; }
+.sig b { font: 400 1.05rem var(--display); color: var(--sapin); }
+.theirs .sig b { color: var(--paon); }
+.mini { background: none; border: 0; padding: 7px 8px; font-size: .8rem; color: var(--ink-2); min-height: 34px; display: inline-flex; align-items: center; gap: 5px; }
+.mini:hover { color: var(--sapin); }
+.mini.danger { color: var(--danger); font-weight: 600; }
+.heart svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
+.heart.on { color: var(--jade); }
+.heart.on svg { fill: var(--jade); stroke: var(--jade); }
+
+.empty { text-align: center; color: var(--ink-2); padding: 50px 28px; }
+.empty svg { width: 130px; height: 80px; color: var(--jade); }
+.empty h2 { margin: 6px 0; font: 400 1.5rem var(--display); color: var(--sapin); }
+.empty p { margin: 0; font-weight: 300; }
+
+/* ---- recueil ---- */
+.tools { padding: 4px 14px 0; flex: none; }
+.search { width: 100%; background: var(--papier); border: 2px solid var(--sapin); padding: 11px 14px; font-weight: 300; font-size: 1rem;
+  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px); }
+.search::placeholder { color: var(--ink-2); }
+.chips { display: flex; gap: 6px; margin: 10px 0 2px; flex-wrap: wrap; }
+.chip { background: none; border: 1px solid var(--sapin); color: var(--sapin); padding: 6px 14px; font-size: .85rem; min-height: 36px; }
+.chip[aria-pressed="true"] { background: var(--sapin); color: var(--papier); }
+.count { margin: 10px 14px 0; font-size: .85rem; color: var(--ink-2); font-weight: 300; }
+.out { margin: 22px 0 6px; text-align: center; }
+.out button { background: none; border: 1px solid var(--ink-2); color: var(--ink-2); padding: 8px 18px; font-size: .85rem; }
+
+/* ---- bas de page ---- */
+.dock { flex: none; background: var(--sapin); color: var(--papier); padding-bottom: env(safe-area-inset-bottom); position: relative; z-index: 3; }
+.dock::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 6px; transform: translateY(-100%);
+  background: linear-gradient(var(--sapin), var(--sapin)) center/100% 2px no-repeat; }
+form.write { padding: 10px 12px 6px; }
+.chipline { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; padding: 6px 10px; background: var(--sapin-2); border-left: 3px solid var(--jade); font-size: .82rem; font-weight: 300; }
+.chipline span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chipline button { background: none; border: 0; color: var(--opale); font-size: 1.1rem; padding: 2px 6px; line-height: 1; }
+.w-title { width: 100%; background: transparent; border: 0; border-bottom: 1px solid #2C6A58; padding: 6px 2px; font: 400 1.15rem var(--display); color: var(--papier); }
+.w-title::placeholder, .w-text::placeholder { color: #86B3A2; opacity: 1; }
+.row { display: flex; gap: 10px; align-items: flex-end; margin-top: 6px; }
+.w-text { font-family: var(--poem); flex: 1; min-height: 46px; max-height: 38dvh; resize: none; background: var(--sapin-2); border: 1px solid #2C6A58; padding: 10px 12px; font-size: 1.12rem; line-height: 1.5; color: var(--papier); }
+.send { flex: none; width: 64px; height: 46px; background: var(--paon); border: 0; color: var(--papier); font: 400 .98rem var(--display); letter-spacing: .02em;
+  clip-path: polygon(9px 0, calc(100% - 9px) 0, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0 calc(100% - 9px), 0 9px); }
+.send:disabled { background: #2C6A58; opacity: .7; }
+.tabs { display: flex; border-top: 1px solid #1B5645; }
+.tab { flex: 1; background: none; border: 0; padding: 11px 6px; color: var(--opale); font: 400 1.1rem var(--display); letter-spacing: .04em; position: relative; }
+.tab[aria-selected="true"] { color: var(--papier); }
+.tab[aria-selected="true"]::before { content: ""; position: absolute; top: 3px; left: 50%; margin-left: -4px; width: 8px; height: 8px; background: var(--jade); transform: rotate(45deg); }
+.tab .dot { display: inline-block; width: 8px; height: 8px; background: var(--glace); border-radius: 50%; margin-left: 6px; vertical-align: middle; }
+
+/* ---- connexion ---- */
+.login { position: fixed; inset: 0; z-index: 20; background-color: var(--sapin); display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+.login .box { width: 100%; max-width: 380px; text-align: center; color: var(--papier); }
+.login .logo { width: 200px; height: auto; margin-bottom: 8px; }
+.login h1 { margin: 0 0 4px; font: 400 2.6rem var(--display); letter-spacing: .06em; }
+.login p { margin: 0 0 22px; color: var(--opale); font: 400 1.1rem/1.4 var(--poem); font-style: italic; }
+.login label { display: block; text-align: left; margin: 12px 0 5px; font-size: .88rem; color: var(--opale); font-weight: 300; }
+.login input { width: 100%; background: var(--sapin-2); border: 1px solid #2C6A58; padding: 12px 14px; font-size: 1rem; color: var(--papier); }
+.login .go { margin-top: 22px; width: 100%; padding: 13px; background: var(--paon); border: 0; color: var(--papier); font: 400 1.3rem var(--display); letter-spacing: .05em;
+  clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px); }
+.login .go:disabled { opacity: .6; }
+.login .err { margin: 12px 0 0; color: #F3B8BE; font-size: .9rem; }
+
+.toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 150px); transform: translateX(-50%); z-index: 30; background: var(--sapin-2); color: var(--papier); padding: 10px 18px; font-size: .9rem; max-width: 88vw; text-align: center; border: 1px solid var(--jade); }
+@media (prefers-reduced-motion: reduce) { .top .lis path { animation: none; stroke-dashoffset: 0; } main { scroll-behavior: auto; } }
+@media (max-width: 380px) { .card.mine { margin-left: 5%; } .card.theirs { margin-right: 5%; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="lis" viewBox="0 0 100 62">
+    <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M50 52 C41 42 41 22 50 6 C59 22 59 42 50 52Z"/>
+      <path d="M50 52 C36 46 28 30 31 14 C42 22 50 38 50 52Z"/>
+      <path d="M50 52 C64 46 72 30 69 14 C58 22 50 38 50 52Z"/>
+      <path d="M50 52 C34 52 20 44 14 29 C28 28 42 36 50 52Z"/>
+      <path d="M50 52 C66 52 80 44 86 29 C72 28 58 36 50 52Z"/>
+      <path d="M8 57 H92 M22 61 H78" opacity=".8"/>
+    </g>
+  </symbol>
+</svg>
+
+<div id="app">
+  <header class="top">
+    <button id="installBtn" class="install" hidden>Installer</button>
+    <h1>Nénuphar</h1>
+    <p class="sub" id="who">Nos poèmes</p>
+  </header>
+  <div class="banner" id="banner" hidden>Mode essai : les poèmes restent sur ce téléphone.</div>
+
+  <section class="tools" id="tools" hidden>
+    <input id="q" class="search" type="search" placeholder="Chercher un mot, un titre, un nom" aria-label="Chercher dans le recueil" autocomplete="off">
+    <div class="chips" id="chips" role="group" aria-label="Filtrer le recueil">
+      <button class="chip" data-f="all" aria-pressed="true">Tous</button>
+      <button class="chip" data-f="victor" aria-pressed="false">Victor</button>
+      <button class="chip" data-f="noa" aria-pressed="false">Noa</button>
+      <button class="chip" data-f="loved" aria-pressed="false">Mes cœurs</button>
+    </div>
+  </section>
+  <p class="count" id="count" hidden></p>
+
+  <main id="main" aria-live="polite"></main>
+
+  <div class="dock">
+    <form class="write" id="write" autocomplete="off">
+      <div class="chipline" id="ctx" hidden><span id="ctxText"></span><button type="button" id="ctxX" aria-label="Annuler">×</button></div>
+      <input id="w-title" class="w-title" type="text" maxlength="80" placeholder="Titre (facultatif)" aria-label="Titre du poème">
+      <div class="row">
+        <textarea id="w-text" class="w-text" rows="2" maxlength="4000" placeholder="Écris ton poème…" aria-label="Texte du poème"></textarea>
+        <button class="send" id="send" type="submit">Offrir</button>
+      </div>
+    </form>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab" id="tab-ech" role="tab" aria-selected="true">Échanges<span class="dot" id="newDot" hidden></span></button>
+      <button class="tab" id="tab-rec" role="tab" aria-selected="false">Recueil</button>
+    </nav>
+  </div>
+</div>
+
+<div class="login" id="login" hidden>
+  <form class="box" id="loginForm">
+    <img class="logo" src="dessin.png" alt="" width="200">
+    <h1>Nénuphar</h1>
+    <p>Correspondances numériques de Noa-Loup Marghieri et Victor Vautier</p>
+    <label for="l-email">Adresse e-mail</label>
+    <input id="l-email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" required>
+    <label for="l-pass">Mot de passe</label>
+    <input id="l-pass" type="password" autocomplete="current-password" required>
+    <p class="err" id="loginErr" hidden></p>
+    <button class="go" id="loginBtn" type="submit">Entrer</button>
+  </form>
+</div>
+<input type="file" id="importFile" accept=".json,application/json" hidden>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var CFG = window.NENUPHAR_CONFIG && window.NENUPHAR_CONFIG.firebase;
+  var COL = "nenuphar_poemes";
+  var NAMES = { "gavrochevautier@gmail.com": "Victor", "noalou.marghieri@gmail.com": "Noa" };
+
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* ignoré */ } }
+
+  var state = {
+    store: null, mode: "local", uid: null, email: "", me: "",
+    poems: [], ready: false, fatal: "", unsub: null,
+    view: "ech", filter: "all", q: "", replyTo: null, editing: null, confirmDel: null,
+    seen: Number(lsGet("nenuphar.seen") || 0), stick: true, opened: {}
+  };
+
+  function nameOf(email) {
+    var e = String(email || "").toLowerCase();
+    if (NAMES[e]) return NAMES[e];
+    var l = e.split("@")[0] || "Moi";
+    return l.charAt(0).toUpperCase() + l.slice(1);
+  }
+  function norm(s) { return String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+  function isMine(p) { return String(p.by || "").toLowerCase() === state.email; }
+  function lovedByMe(p) { return (p.loves || []).indexOf(state.email) >= 0; }
+
+  var toastT;
+  function toast(msg) {
+    var t = $("toast"); t.textContent = msg; t.hidden = false;
+    clearTimeout(toastT); toastT = setTimeout(function () { t.hidden = true; }, 3200);
+  }
+  function dbMsg(e) {
+    var c = e && e.code;
+    if (c === "permission") return "Cette adresse n'a pas accès au recueil.";
+    if (c === "quota_exceeded") return "La limite gratuite du jour est atteinte. Réessaie demain.";
+    return "Impossible d'enregistrer. Vérifie ta connexion.";
+  }
+
+  /* ---------- stockage : local (essai) ou Firebase (partagé) ---------- */
+  function makeLocalStore() {
+    var subs = [];
+    function read() { try { return JSON.parse(lsGet("nenuphar.poemes") || "[]"); } catch (e) { return []; } }
+    function save(a) { lsSet("nenuphar.poemes", JSON.stringify(a)); subs.forEach(function (f) { f(a); }); }
+    return {
+      mode: "local",
+      onSnapshot: function (cb) { subs.push(cb); setTimeout(function () { cb(read()); }, 0); return function () { subs = subs.filter(function (f) { return f !== cb; }); }; },
+      id: function () { return Math.random().toString(36).slice(2, 10) + Date.now().toString(36); },
+      set: function (id, d) { save(read().filter(function (x) { return x.id !== id; }).concat([Object.assign({ id: id }, d)])); return Promise.resolve(); },
+      update: function (id, d) { save(read().map(function (x) { return x.id === id ? Object.assign({}, x, d) : x; })); return Promise.resolve(); },
+      del: function (id) { save(read().filter(function (x) { return x.id !== id; })); return Promise.resolve(); }
+    };
+  }
+  var FB = "https://www.gstatic.com/firebasejs/10.12.2/";
+  function makeFirebaseStore(cfg) {
+    return Promise.all([import(FB + "firebase-app.js"), import(FB + "firebase-auth.js"), import(FB + "firebase-firestore.js")]).then(function (m) {
+      var A = m[0], Au = m[1], F = m[2];
+      var app = A.initializeApp(cfg, "nenuphar");
+      var auth = Au.getAuth(app), db;
+      try { db = F.initializeFirestore(app, { localCache: F.persistentLocalCache({ tabManager: F.persistentMultipleTabManager() }) }); }
+      catch (e) { db = F.getFirestore(app); }
+      function wrap(p) {
+        return p.catch(function (e) {
+          var c = e && e.code;
+          throw { code: c === "permission-denied" ? "permission" : c === "resource-exhausted" ? "quota_exceeded" : c || "error" };
+        });
+      }
+      return {
+        mode: "firebase",
+        onAuth: function (cb) { return Au.onAuthStateChanged(auth, cb); },
+        signIn: function (email, pass) { return Au.signInWithEmailAndPassword(auth, email, pass); },
+        signOut: function () { return Au.signOut(auth); },
+        onSnapshot: function (cb, errCb) {
+          return F.onSnapshot(F.collection(db, COL), function (snap) {
+            cb(snap.docs.map(function (d) { var o = d.data(); o.id = d.id; return o; }));
+          }, errCb);
+        },
+        id: function () { return F.doc(F.collection(db, COL)).id; },
+        set: function (id, data) { return wrap(F.setDoc(F.doc(db, COL, id), data)); },
+        update: function (id, data) { return wrap(F.updateDoc(F.doc(db, COL, id), data)); },
+        del: function (id) { return wrap(F.deleteDoc(F.doc(db, COL, id))); }
+      };
+    });
+  }
+
+  /* ---------- dates ---------- */
+  function dayKey(ms) { var d = new Date(ms); return d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate(); }
+  function dayLabel(ms) {
+    var now = Date.now();
+    if (dayKey(ms) === dayKey(now)) return "Aujourd'hui";
+    if (dayKey(ms) === dayKey(now - 86400000)) return "Hier";
+    var o = { weekday: "long", day: "numeric", month: "long" };
+    if (new Date(ms).getFullYear() !== new Date(now).getFullYear()) o.year = "numeric";
+    return new Intl.DateTimeFormat("fr-FR", o).format(new Date(ms));
+  }
+  function timeLabel(ms) { return new Intl.DateTimeFormat("fr-FR", { hour: "2-digit", minute: "2-digit" }).format(new Date(ms)); }
+  function shortDate(ms) { return new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short", year: "numeric" }).format(new Date(ms)); }
+
+  /* ---------- éléments ---------- */
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  var HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5C5 15.3 3 11.9 3 8.9 3 6.2 5 4.4 7.3 4.4c1.9 0 3.5 1 4.7 2.9 1.2-1.9 2.8-2.9 4.7-2.9C19 4.4 21 6.2 21 8.9c0 3-2 6.4-9 11.6z"/></svg>';
+  function lis(cls) {
+    var s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("viewBox", "0 0 100 62"); s.setAttribute("class", cls || ""); s.setAttribute("aria-hidden", "true");
+    var u = document.createElementNS("http://www.w3.org/2000/svg", "use"); u.setAttribute("href", "#lis"); s.appendChild(u);
+    return s;
+  }
+  function excerpt(p) {
+    var t = (p.title ? p.title + " — " : "") + String(p.text || "").replace(/\s*\n+\s*/g, " / ");
+    return t.length > 90 ? t.slice(0, 88).trim() + "…" : t;
+  }
+
+  function card(p, opts) {
+    opts = opts || {};
+    var mine = isMine(p);
+    var wrap = el("article", "card " + (mine ? "mine" : "theirs") + (opts.compact ? " wide" : "") + (opts.compact && !state.opened[p.id] ? " clamp" : ""));
+    wrap.dataset.id = p.id;
+    var inn = el("div", "card-in"); wrap.appendChild(inn);
+
+    if (p.reply) {
+      var q = el("blockquote", "quote");
+      q.appendChild(el("b", null, p.reply.name || "")); q.appendChild(document.createTextNode(" — " + (p.reply.excerpt || "")));
+      inn.appendChild(q);
+    }
+    if (p.title) inn.appendChild(el("h3", "p-title", p.title));
+    inn.appendChild(el("p", "p-body", p.text || ""));
+
+    var foot = el("div", "foot");
+    var sig = el("div", "sig");
+    sig.appendChild(el("b", null, p.byName || nameOf(p.by)));
+    sig.appendChild(document.createTextNode(opts.compact ? ", " + shortDate(p.at || 0) : ", " + timeLabel(p.at || 0) + (p.edited ? " (modifié)" : "")));
+    foot.appendChild(sig);
+
+    var n = (p.loves || []).length;
+    var hb = el("button", "mini heart" + (lovedByMe(p) ? " on" : "")); hb.type = "button";
+    hb.setAttribute("aria-label", lovedByMe(p) ? "Retirer mon cœur" : "Aimer ce poème"); hb.setAttribute("aria-pressed", lovedByMe(p) ? "true" : "false");
+    hb.innerHTML = HEART; if (n) hb.appendChild(document.createTextNode(String(n)));
+    hb.addEventListener("click", function (ev) { ev.stopPropagation(); toggleLove(p); });
+    foot.appendChild(hb);
+
+    var rb = el("button", "mini", "Répondre"); rb.type = "button";
+    rb.addEventListener("click", function (ev) { ev.stopPropagation(); startReply(p); });
+    foot.appendChild(rb);
+
+    if (mine) {
+      var eb = el("button", "mini", "Modifier"); eb.type = "button";
+      eb.addEventListener("click", function (ev) { ev.stopPropagation(); startEdit(p); });
+      foot.appendChild(eb);
+      var db = el("button", "mini" + (state.confirmDel === p.id ? " danger" : ""), state.confirmDel === p.id ? "Supprimer ?" : "Supprimer"); db.type = "button";
+      db.addEventListener("click", function (ev) { ev.stopPropagation(); removePoem(p); });
+      foot.appendChild(db);
+    }
+    inn.appendChild(foot);
+
+    if (opts.compact) {
+      wrap.addEventListener("click", function () { state.opened[p.id] = !state.opened[p.id]; render(); });
+    }
+    return wrap;
+  }
+
+  /* ---------- rendu ---------- */
+  function sortAsc(a, b) { return (a.at || 0) - (b.at || 0); }
+  function visibleFor() {
+    var list = state.poems.slice();
+    if (state.filter === "victor") list = list.filter(function (p) { return nameOf(p.by) === "Victor"; });
+    else if (state.filter === "noa") list = list.filter(function (p) { return nameOf(p.by) === "Noa"; });
+    else if (state.filter === "loved") list = list.filter(lovedByMe);
+    var toks = norm(state.q).split(/\s+/).filter(Boolean);
+    if (toks.length) {
+      list = list.filter(function (p) {
+        var hay = norm([p.title, p.text, p.byName || nameOf(p.by)].join(" "));
+        return toks.every(function (t) { return hay.indexOf(t) >= 0; });
+      });
+    }
+    return list;
+  }
+  function emptyBlock(title, text) {
+    var d = el("div", "empty"); d.appendChild(el("h2", null, title)); d.appendChild(el("p", null, text)); return d;
+  }
+
+  function renderEchanges(main) {
+    var list = state.poems.slice().sort(sortAsc);
+    if (!list.length) {
+      main.appendChild(emptyBlock("Le bassin est calme", "Aucun poème pour l'instant. Écris le premier ci-dessous."));
+      return;
+    }
+    var lastDay = "", marked = false;
+    list.forEach(function (p) {
+      var k = dayKey(p.at || 0);
+      if (k !== lastDay) {
+        lastDay = k;
+        var d = el("div", "day"); d.appendChild(el("i")); d.appendChild(el("span", null, dayLabel(p.at || 0))); d.appendChild(el("i"));
+        main.appendChild(d);
+      }
+      if (!marked && !isMine(p) && (p.at || 0) > state.seen) {
+        marked = true; main.appendChild(el("div", "fresh", "Nouveau"));
+      }
+      main.appendChild(card(p));
+    });
+  }
+  function renderRecueil(main) {
+    var list = visibleFor().sort(function (a, b) { return (b.at || 0) - (a.at || 0); });
+    var c = $("count");
+    c.hidden = false;
+    c.textContent = state.poems.length ? (list.length === 1 ? "1 poème" : list.length + " poèmes") + (list.length !== state.poems.length ? " sur " + state.poems.length : "") : "";
+    if (!state.poems.length) { main.appendChild(emptyBlock("Pas encore de recueil", "Les poèmes que vous vous offrez viendront s'ajouter ici.")); }
+    else if (!list.length) { main.appendChild(emptyBlock("Rien trouvé", "Essaie un autre mot ou change de filtre.")); }
+    list.forEach(function (p) { main.appendChild(card(p, { compact: true })); });
+    var out = el("div", "out");
+    var ib = el("button", null, "Importer des poèmes"); ib.type = "button"; ib.style.marginRight = "8px";
+    ib.addEventListener("click", function () { $("importFile").click(); });
+    out.appendChild(ib);
+    var b = el("button", null, "Se déconnecter"); b.type = "button";
+    b.addEventListener("click", function () { if (state.store && state.store.signOut) state.store.signOut(); });
+    if (state.mode === "firebase") out.appendChild(b);
+    main.appendChild(out);
+  }
+  function render() {
+    var main = $("main");
+    var prevTop = main.scrollTop, atBottom = main.scrollHeight - main.scrollTop - main.clientHeight < 80;
+    while (main.firstChild) main.removeChild(main.firstChild);
+    var rec = state.view === "rec";
+    $("write").hidden = rec; $("tools").hidden = !rec; $("count").hidden = !rec;
+    $("tab-ech").setAttribute("aria-selected", rec ? "false" : "true");
+    $("tab-rec").setAttribute("aria-selected", rec ? "true" : "false");
+    if (state.fatal) { main.appendChild(emptyBlock("Connexion impossible", state.fatal)); return; }
+    if (!state.ready) { main.appendChild(emptyBlock("Un instant…", "Le recueil se charge.")); return; }
+    if (rec) renderRecueil(main); else renderEchanges(main);
+    if (!rec && (state.stick || atBottom)) { main.scrollTop = main.scrollHeight; state.stick = false; }
+    else main.scrollTop = prevTop;
+    var hasNew = state.view === "rec" && state.poems.some(function (p) { return !isMine(p) && (p.at || 0) > state.seen; });
+    $("newDot").hidden = !hasNew;
+  }
+  function markSeen() {
+    var m = 0; state.poems.forEach(function (p) { if (!isMine(p) && (p.at || 0) > m) m = p.at; });
+    if (m > state.seen) { state.seen = m; lsSet("nenuphar.seen", String(m)); }
+  }
+
+  /* ---------- actions ---------- */
+  function setView(v) {
+    if (state.view === "ech" && v === "rec") markSeen();
+    state.view = v; state.stick = v === "ech";
+    render();
+    if (v === "ech") setTimeout(markSeen, 4000);
+  }
+  function toggleLove(p) {
+    if (!state.store || !state.email) return;
+    var set = (p.loves || []).slice(), i = set.indexOf(state.email);
+    if (i >= 0) set.splice(i, 1); else set.push(state.email);
+    state.store.update(p.id, { loves: set }).catch(function (e) { toast(dbMsg(e)); });
+  }
+  function startReply(p) {
+    state.replyTo = { id: p.id, name: p.byName || nameOf(p.by), excerpt: excerpt(p) };
+    state.editing = null;
+    if (state.view !== "ech") setView("ech");
+    showCtx(); $("w-text").focus();
+  }
+  function startEdit(p) {
+    state.editing = p.id; state.replyTo = null;
+    $("w-title").value = p.title || ""; $("w-text").value = p.text || ""; autosize();
+    if (state.view !== "ech") setView("ech");
+    showCtx(); $("w-text").focus();
+  }
+  function showCtx() {
+    var box = $("ctx");
+    if (state.editing) { $("ctxText").textContent = "Tu modifies ce poème"; $("send").textContent = "Garder"; box.hidden = false; }
+    else if (state.replyTo) { $("ctxText").textContent = "En réponse à " + state.replyTo.name + " : " + state.replyTo.excerpt; $("send").textContent = "Offrir"; box.hidden = false; }
+    else { box.hidden = true; $("send").textContent = "Offrir"; }
+  }
+  function clearCtx(keepText) {
+    var wasEditing = !!state.editing;
+    state.replyTo = null; state.editing = null; showCtx();
+    if (wasEditing && !keepText) { $("w-title").value = ""; $("w-text").value = ""; autosize(); }
+  }
+  function removePoem(p) {
+    if (state.confirmDel !== p.id) {
+      state.confirmDel = p.id; render();
+      setTimeout(function () { if (state.confirmDel === p.id) { state.confirmDel = null; render(); } }, 3500);
+      return;
+    }
+    state.confirmDel = null;
+    state.store.del(p.id).catch(function (e) { toast(dbMsg(e)); });
+    toast("Poème supprimé");
+  }
+  function autosize() {
+    var t = $("w-text"); t.style.height = "auto"; t.style.height = Math.min(t.scrollHeight + 2, window.innerHeight * 0.38) + "px";
+  }
+  function saveDraft() { lsSet("nenuphar.draft", JSON.stringify({ t: $("w-title").value, x: $("w-text").value })); }
+
+  $("w-text").addEventListener("input", function () { autosize(); if (!state.editing) saveDraft(); });
+  $("w-title").addEventListener("input", function () { if (!state.editing) saveDraft(); });
+  $("w-text").addEventListener("keydown", function (e) { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); $("write").requestSubmit ? $("write").requestSubmit() : $("send").click(); } });
+  $("ctxX").addEventListener("click", function () { clearCtx(false); });
+  $("tab-ech").addEventListener("click", function () { setView("ech"); });
+  $("tab-rec").addEventListener("click", function () { setView("rec"); });
+  $("q").addEventListener("input", function () { state.q = this.value; render(); });
+  Array.prototype.forEach.call(document.querySelectorAll(".chip"), function (b) {
+    b.addEventListener("click", function () {
+      state.filter = b.dataset.f;
+      Array.prototype.forEach.call(document.querySelectorAll(".chip"), function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+      render();
+    });
+  });
+
+  $("write").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var text = $("w-text").value.replace(/\s+$/g, "").replace(/^\n+/, ""), title = $("w-title").value.trim();
+    if (!text.trim()) { toast("Écris quelques vers avant d'envoyer."); return; }
+    if (!state.store || !state.uid) { toast("Connecte-toi d'abord."); return; }
+    var s = state.store, op;
+    if (state.editing) {
+      op = s.update(state.editing, { title: title, text: text, edited: Date.now() });
+      toast("Poème modifié");
+    } else {
+      var id = s.id();
+      var doc = { title: title, text: text, by: state.email, byName: state.me, at: Date.now(), loves: [] };
+      if (state.replyTo) doc.reply = { id: state.replyTo.id, name: state.replyTo.name, excerpt: state.replyTo.excerpt };
+      op = s.set(id, doc);
+      state.stick = true;
+    }
+    $("w-title").value = ""; $("w-text").value = ""; autosize(); lsSet("nenuphar.draft", "");
+    clearCtx(true); markSeen();
+    op.catch(function (e) { toast(dbMsg(e)); });
+  });
+
+  function hashId(str) { var h = 5381; for (var i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) >>> 0; return h.toString(36); }
+  $("importFile").addEventListener("change", function () {
+    var f = this.files && this.files[0]; this.value = "";
+    if (!f || !state.store || !state.uid) return;
+    var r = new FileReader();
+    r.onload = function () {
+      var arr; try { arr = JSON.parse(r.result); } catch (e) { toast("Fichier illisible."); return; }
+      if (!Array.isArray(arr)) { toast("Fichier illisible."); return; }
+      var known = {}; state.poems.forEach(function (p) { known[p.id] = 1; });
+      var jobs = [], added = 0;
+      arr.forEach(function (p) {
+        if (!p || !p.text || !p.by) return;
+        var id = "imp" + hashId(String(p.by) + "|" + p.at + "|" + p.text);
+        if (known[id]) return;
+        added++;
+        jobs.push(state.store.set(id, { title: p.title || "", text: String(p.text), by: String(p.by).toLowerCase(), byName: p.byName || nameOf(p.by), at: Number(p.at) || Date.now(), loves: [] }));
+      });
+      Promise.all(jobs).then(function () { toast(added ? added + " poèmes ajoutés" : "Déjà tout importé"); })
+        .catch(function (e) { toast(dbMsg(e)); });
+    };
+    r.readAsText(f);
+  });
+
+  var installEvt = null;
+  window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); installEvt = e; $("installBtn").hidden = false; });
+  $("installBtn").addEventListener("click", function () { if (!installEvt) return; installEvt.prompt(); installEvt = null; $("installBtn").hidden = true; });
+
+  /* ---------- données et connexion ---------- */
+  function stopData() { if (state.unsub) { try { state.unsub(); } catch (e) { /* ignoré */ } state.unsub = null; } state.poems = []; state.ready = false; }
+  function startData() {
+    stopData();
+    state.unsub = state.store.onSnapshot(function (arr) {
+      var first = !state.ready;
+      state.poems = arr; state.ready = true;
+      if (first) { state.stick = true; setTimeout(markSeen, 4000); }
+      render();
+    }, function (e) {
+      state.ready = true;
+      state.fatal = e && e.code === "permission-denied" ? "Cette adresse n'a pas accès au recueil." : "Impossible de lire les poèmes. Vérifie ta connexion.";
+      render();
+    });
+  }
+  function showLogin(show) { $("login").hidden = !show; if (show) setTimeout(function () { var x = $($("l-email").value ? "l-pass" : "l-email"); if (x) x.focus(); }, 50); }
+  function authMsg(e) {
+    var c = e && e.code;
+    if (c === "auth/network-request-failed") return "Pas de connexion. Réessaie quand tu as du réseau.";
+    if (c === "auth/too-many-requests") return "Trop d'essais. Attends quelques minutes et réessaie.";
+    if (c === "auth/invalid-email") return "Cette adresse e-mail n'est pas valide.";
+    return "E-mail ou mot de passe incorrect.";
+  }
+  $("loginForm").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var email = $("l-email").value.trim(), pass = $("l-pass").value, err = $("loginErr");
+    if (!email || !pass) { err.textContent = "Renseigne ton e-mail et ton mot de passe."; err.hidden = false; return; }
+    err.hidden = true; $("loginBtn").disabled = true; lsSet("nenuphar.email", email);
+    state.store.signIn(email, pass).catch(function (e) { err.textContent = authMsg(e); err.hidden = false; })
+      .then(function () { $("loginBtn").disabled = false; });
+  });
+
+  function setMe(email) {
+    state.email = String(email || "").toLowerCase(); state.me = nameOf(state.email);
+    $("who").textContent = state.me === "Victor" ? "Pour Noa" : state.me === "Noa" ? "Pour Victor" : "Nos poèmes";
+  }
+  function boot() {
+    $("l-email").value = lsGet("nenuphar.email") || "";
+    try { var d = JSON.parse(lsGet("nenuphar.draft") || "null"); if (d) { $("w-title").value = d.t || ""; $("w-text").value = d.x || ""; autosize(); } } catch (e) { /* ignoré */ }
+    render();
+    if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+      try { navigator.serviceWorker.register("sw.js").catch(function () {}); } catch (e) { /* ignoré */ }
+    }
+    if (!CFG) {
+      state.mode = "local"; state.store = makeLocalStore(); state.uid = "moi"; setMe("moi@essai");
+      $("banner").hidden = false; startData(); return;
+    }
+    state.mode = "firebase";
+    makeFirebaseStore(CFG).then(function (s) {
+      state.store = s;
+      s.onAuth(function (user) {
+        if (user) { state.uid = user.uid; setMe(user.email); showLogin(false); startData(); }
+        else { state.uid = null; state.fatal = ""; stopData(); showLogin(true); render(); }
+      });
+    }).catch(function () { toast("Impossible de charger Firebase. Vérifie ta connexion."); });
+  }
+
+  if (window.__NENUPHAR_TEST__) {
+    window.__NENUPHAR_TEST__ = { state: state, render: render, setView: setView, setMe: setMe, nameOf: nameOf };
+  }
+  boot();
+})();
+</script>
+</body>
+</html>
