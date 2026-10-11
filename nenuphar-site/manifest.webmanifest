@@ -1,0 +1,17 @@
+{
+  "name": "Nénuphar",
+  "short_name": "Nénuphar",
+  "description": "Nos poèmes, rien que nos poèmes.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A3B2E",
+  "theme_color": "#0A3B2E",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
